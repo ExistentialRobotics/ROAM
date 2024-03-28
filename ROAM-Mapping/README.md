@@ -7,7 +7,7 @@ Distributed multi-robot semantic octree mapping implementation for building prob
 * PCL
 * OctoMap
 * octomap_rviz_plugins
-* ([SSMI-Mapping](https://github.com/ExistentialRobotics/SSMI/tree/main/SSMI-Mapping))
+* [SSMI-Mapping](https://github.com/ExistentialRobotics/SSMI/tree/main/SSMI-Mapping)
 
 ## How to use
 1. `launch/semantic_octomap_multi.launch` starts ROS nodes `semantic_cloud` and `semantic_octomap_multi`.

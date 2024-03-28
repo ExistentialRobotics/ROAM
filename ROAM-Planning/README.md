@@ -4,7 +4,7 @@ Implementation of distributed multi-robot planning for exploration. In order to 
 ## Dependencies
 * ROS Melodic
 * Catkin
-* ([rospy_tutorials](https://github.com/ros/ros_tutorials/tree/noetic-devel/rospy_tutorials))
+* [rospy_tutorials](https://github.com/ros/ros_tutorials/tree/noetic-devel/rospy_tutorials)
 * pybind11
 
 ## How to use
