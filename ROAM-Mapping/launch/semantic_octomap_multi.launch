@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+
+	<arg name="name" default="husky_1" doc="Robot name"/>
+
+	<rosparam file="$(find roam_mapping)/params/multi_robot_semantic_mapping_params.yaml" command="load"
+						subst_value="true" ns="/$(arg name)"/>
+	
+	<group ns="$(arg name)">
+	
+		<node name="semantic_cloud" pkg="semantic_octomap" type="semantic_sensor_node.py" respawn="true">
+		  <param name="agent_name" value="$(arg name)"/>
+		</node>
+		
+		<node name="semantic_octomap_multi" pkg="roam_mapping" type="semantic_octomap_multi" respawn="true">
+		  <param name="agent_name" value="$(arg name)"/>
+		</node>
+		
+	</group>
+
+</launch>
+

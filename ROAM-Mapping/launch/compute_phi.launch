@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<launch>
+	<param name="use_sim_time" value="false"/>
+
+    <arg name="file_name" default="/catkin_ws/bagfiles/"/>
+	<arg name="rate" default="1"/>
+	<arg name="delay" default="0"/>
+	<arg name="start" default="0"/>
+
+    <node pkg="rosbag" type="play" name="rosbag_play"
+          args="--clock --rate $(arg rate) -d $(arg delay) -s $(arg start) $(arg file_name)"/>
+
+	<node pkg="roam_mapping" type="compute_phi_node" name="compute_phi_node" output="screen">
+	<param name="~robot_model" type="string" value="husky"/>
+	<param name="~map_topic_name" type="string" value="/octomap_full"/>
+	<param name="~sync_duration" type="double" value="5"/>
+	</node>
+
+</launch>

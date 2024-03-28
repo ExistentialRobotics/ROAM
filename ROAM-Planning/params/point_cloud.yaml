@@ -1,0 +1,14 @@
+# Camera intrinsic matrix parameters (OpenCV)
+camera:
+  fx: 65.24951330239097
+  fy: 65.24951330239097
+  cx: 80.0
+  cy: 60.0
+
+  width: 160
+  height: 120
+
+depth_image:
+  depth_image_topic: "/camera/depth"
+  frame_id: "/camera"
+  depth_noise_std: 0

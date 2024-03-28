@@ -1,0 +1,14 @@
+octomap:
+  pointcloud_topic: /pc_from_depth
+  frame_id: world
+  resolution: 0.5
+  max_range: 20.0
+  min_occ_prob: 0.006692851
+  max_occ_prob: 0.993307149
+  occupancy_thres: 0.5
+  prob_hit: 0.731058579
+  prob_miss: 0.268941421
+  min_ground_z: 2.0
+  max_ground_z: 3.5
+  consensus_weight: 0.01
+  comm_timer: 30

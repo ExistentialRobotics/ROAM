@@ -1,0 +1,6 @@
+<launch>
+
+  <rosparam file="$(find roam_mapping)/params/octomap_generator.yaml" command="load"/>
+  <node pkg="roam_mapping" type="octomap_multi" name="octomap_multi" output="screen"/>
+
+</launch>

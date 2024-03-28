@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+
+	<arg name="name" default="husky_1" doc="Robot name"/>
+
+	<rosparam file="$(find roam_planning)/params/multi_robot_exploration_params.yaml" command="load"
+						subst_value="true" ns="/$(arg name)"/>
+	
+	<group ns="$(arg name)">
+	
+		<node name="ga_exploration" pkg="roam_planning" type="ga_multi_exploration_node.py" output="screen" respawn="true">
+		  <param name="agent_name" value="$(arg name)"/>
+		</node>
+
+		<!-- Optional: you can use this simple tracking and navigation node in order to execute the computed path.
+		<node name="path_navigation_node" pkg="roam_planning" type="simple_path_navigation_node.py" output="screen" respawn="true">
+		  <param name="agent_name" value="$(arg name)"/>
+		</node>
+		-->
+		
+	</group>
+
+</launch>
+

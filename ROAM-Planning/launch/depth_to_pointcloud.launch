@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<launch>
+
+  <arg name="name" default="husky_1" doc="Robot name"/>
+  
+  <rosparam file="$(find diff_info_gathering_ros)/params/point_cloud.yaml" command="load"/>
+  
+  <group ns="$(arg name)">
+  
+    <node pkg="roam_planning" type="depth_to_point_cloud.py" name="depth_to_point_cloud" output="screen"/>
+  
+  </group>
+    
+</launch>
