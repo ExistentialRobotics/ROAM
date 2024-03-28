@@ -17,7 +17,7 @@ ROAM is a library for distributed multi-robot autonomous exploration using a str
 
 ROAM is implemented as two ROS packages, can be built on x86-64 and ARM-based processors:
 - Distributed multi-robot semantic octree mapping of an environment ([ROAM-Mapping](https://github.com/ExistentialRobotics/ROAM/tree/master/ROAM-Mapping))
-- Distributed multi-robot collaborative safety and perception-aware exploration ([SSMI-Planning](https://github.com/ExistentialRobotics/ROAM/tree/master/ROAM-Planning))
+- Distributed multi-robot collaborative safety and perception-aware exploration ([ROAM-Planning](https://github.com/ExistentialRobotics/ROAM/tree/master/ROAM-Planning))
 
 
 <p align="center">
