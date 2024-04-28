@@ -22,7 +22,7 @@ ROAM is implemented as two ROS packages, can be built on x86-64 and ARM-based pr
 
 <p align="center">
     <a href="https://www.youtube.com/embed/xx">
-    <img src="docs/media/xx.png" alt="ROAM">
+    <img src="docs/media/ROAM.png" alt="ROAM">
     </a>
 </p>
 
