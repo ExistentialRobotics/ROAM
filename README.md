@@ -19,13 +19,7 @@ ROAM is implemented as two ROS packages, can be built on x86-64 and ARM-based pr
 - Distributed multi-robot semantic octree mapping of an environment ([ROAM-Mapping](https://github.com/ExistentialRobotics/ROAM/tree/master/ROAM-Mapping))
 - Distributed multi-robot collaborative safety and perception-aware exploration ([ROAM-Planning](https://github.com/ExistentialRobotics/ROAM/tree/master/ROAM-Planning))
 
-
-<p align="center">
-    <a href="https://www.youtube.com/embed/EADUWRSkOKs">
-    <img src="docs/media/ROAM.png" alt="ROAM">
-    </a>
-</p>
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/EADUWRSkOKs?si=AWzxCNrm_wy1hcU0" title="ROAM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ## Citation
 
