@@ -5,7 +5,7 @@ CoverageComputeNode::CoverageComputeNode(ros::NodeHandle& nh): nh_(nh)
 {
     nh_.getParam("octomap_topic", octomap_topic_);
     
-    cov_pub_ = nh_.advertise<octomap_multi::Named_float>("coverage", 1, true);
+    cov_pub_ = nh_.advertise<roam_mapping::Named_float>("coverage", 1, true);
     
     octomap_sub_ = nh_.subscribe(octomap_topic_, 1, &CoverageComputeNode::octomapCallback, this, ros::TransportHints().tcpNoDelay());
     
@@ -14,7 +14,7 @@ CoverageComputeNode::CoverageComputeNode(ros::NodeHandle& nh): nh_(nh)
 
 CoverageComputeNode::~CoverageComputeNode() {}
 
-void CoverageComputeNode::octomapCallback(const octomap_multi::Octomap_multi::ConstPtr& octomap_msg)
+void CoverageComputeNode::octomapCallback(const roam_mapping::Octomap_multi::ConstPtr& octomap_msg)
 {
 	ROS_INFO("Coverage node: A new map received!");
 	

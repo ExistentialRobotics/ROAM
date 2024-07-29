@@ -19,7 +19,7 @@ PhiComputeNode::PhiComputeNode(ros::NodeHandle& nh): nh_(nh)
 
 PhiComputeNode::~PhiComputeNode() {}
 
-void PhiComputeNode::octomapCallback(const octomap_multi::Octomap_multi::ConstPtr& octomap_msg)
+void PhiComputeNode::octomapCallback(const roam_mapping::Octomap_multi::ConstPtr& octomap_msg)
 {
     const char* agent_name = octomap_msg->agent_name.c_str();
     ROS_INFO("Compute phi node: A map received from %s!", agent_name);
