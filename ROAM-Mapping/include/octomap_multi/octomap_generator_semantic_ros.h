@@ -13,7 +13,7 @@
 #include <tf/message_filter.h>
 #include <message_filters/subscriber.h>
 #include <string>
-#include <octomap_multi/Octomap_multi.h>
+#include <roam_mapping/Octomap_multi.h>
 #include <time.h>
 
 
@@ -34,7 +34,7 @@ public:
      */
     void insertCloudCallback(const sensor_msgs::PointCloud2::ConstPtr& cloud);
     
-    void octomapCallback(const octomap_multi::Octomap_multi::ConstPtr& octomap_multi_msg);
+    void octomapCallback(const roam_mapping::Octomap_multi::ConstPtr& octomap_multi_msg);
     
     void publish2DOccupancyMap(const SemanticOctree* octomap,
                                const ros::Time& stamp,
@@ -48,6 +48,7 @@ public:
      * \param filename The output filename
      */
     bool save(const char* filename) const;
+    void setWriteSemantics(bool write);
 
 protected:
     OctomapGeneratorBase<SemanticOctree>* octomap_generator_; ///<Octomap instance pointer
@@ -82,7 +83,7 @@ protected:
     bool publish_2d_map;
     double min_ground_z;
     double max_ground_z;
-    octomap_multi::Octomap_multi map_msg_; ///<ROS octomap message
+    roam_mapping::Octomap_multi map_msg_; ///<ROS octomap message
 };
 
 

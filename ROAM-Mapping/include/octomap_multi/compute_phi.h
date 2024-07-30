@@ -4,7 +4,7 @@
 #include <ros/ros.h>
 #include <std_msgs/Float32.h>
 #include <octomap/octomap.h>
-#include <octomap_multi/Octomap_multi.h>
+#include <roam_mapping/Octomap_multi.h>
 #include <semantic_octree/SemanticOcTree.h>
 #include <semantic_octree/Semantics.h>
 #include <boost/shared_ptr.hpp>
@@ -24,7 +24,7 @@ public:
     
     ~PhiComputeNode();
     
-    void octomapCallback(const octomap_multi::Octomap_multi::ConstPtr& octomap_msg);
+    void octomapCallback(const roam_mapping::Octomap_multi::ConstPtr& octomap_msg);
 
     static void expandNodeRecurse(SemanticOctree* inc_octomap_ptr, SemanticsOcTreeNode* node, unsigned int depth);
 

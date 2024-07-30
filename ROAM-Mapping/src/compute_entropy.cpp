@@ -5,14 +5,14 @@ EntropyComputeNode::EntropyComputeNode(ros::NodeHandle& nh): nh_(nh)
 {
     nh_.getParam("octomap_topic", octomap_topic_);
     
-    ent_pub_ = nh_.advertise<octomap_multi::Named_float>("entropy", 1, true);
+    ent_pub_ = nh_.advertise<roam_mapping::Named_float>("entropy", 1, true);
     
     octomap_sub_ = nh_.subscribe(octomap_topic_, 1, &EntropyComputeNode::octomapCallback, this, ros::TransportHints().tcpNoDelay());
 }
 
 EntropyComputeNode::~EntropyComputeNode() {}
 
-void EntropyComputeNode::octomapCallback(const octomap_multi::Octomap_multi::ConstPtr& octomap_msg)
+void EntropyComputeNode::octomapCallback(const roam_mapping::Octomap_multi::ConstPtr& octomap_msg)
 {
 	SemanticOctree* inc_octree = new SemanticOctree(octomap_msg->octomap.resolution);
 	if (inc_octree){

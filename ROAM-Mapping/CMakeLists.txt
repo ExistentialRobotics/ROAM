@@ -51,13 +51,7 @@ set(LINK_LIBS
   ${PCL_LIBRARIES}
 )
 
-add_executable(octomap_multi
- src/octomap_generator.cpp
- src/octomap_generator_ros.cpp
-)
-
-target_link_libraries(octomap_multi ${LINK_LIBS})
-
+# Remove octomap_multi
 add_executable(semantic_octomap_multi
  src/octomap_generator_semantic_ros.cpp
 )
@@ -93,8 +87,8 @@ install(DIRECTORY
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
   FILES_MATCHING PATTERN "*.yaml"
   )
-
-install(TARGETS octomap_multi semantic_octomap_multi
+# Remove octimap_multi
+install(TARGETS semantic_octomap_multi
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

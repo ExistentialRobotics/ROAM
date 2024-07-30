@@ -2,9 +2,9 @@
 #define COMPUTE_COVERAGE
 
 #include <ros/ros.h>
-#include <octomap_multi/Named_float.h>
+#include <roam_mapping/Named_float.h>
 #include <octomap/octomap.h>
-#include <octomap_multi/Octomap_multi.h>
+#include <roam_mapping/Octomap_multi.h>
 #include <semantic_octree/SemanticOcTree.h>
 #include <semantic_octree/Semantics.h>
 #include <string>
@@ -21,14 +21,14 @@ public:
     
     ~CoverageComputeNode();
     
-    void octomapCallback(const octomap_multi::Octomap_multi::ConstPtr& octomap_msg);
+    void octomapCallback(const roam_mapping::Octomap_multi::ConstPtr& octomap_msg);
 
 protected:
     ros::NodeHandle nh_;
     std::string octomap_topic_;
     ros::Publisher cov_pub_;
     ros::Subscriber octomap_sub_;
-    octomap_multi::Named_float cov_msg_;
+    roam_mapping::Named_float cov_msg_;
     octomap::KeySet key_set_;
 };
 

@@ -18,7 +18,7 @@ SemanticOctomapGeneratorNode::SemanticOctomapGeneratorNode(ros::NodeHandle& nh):
     
     map_msg_.agent_name = robot_name_;
     
-    fullmap_pub_ = nh_.advertise<octomap_multi::Octomap_multi>("/octomap_full", 1, true);
+    fullmap_pub_ = nh_.advertise<roam_mapping::Octomap_multi>("/octomap_full", 1, true);
     colormap_pub_ = nh_.advertise<octomap_msgs::Octomap>(robot_name_ + "/octomap_color", 1, true);
     occ_map_pub_ = nh_.advertise<nav_msgs::OccupancyGrid>(robot_name_ + "/occupancy_map_2D", 1, true);
     pointcloud_sub_ = new message_filters::Subscriber<sensor_msgs::PointCloud2> (nh_, pointcloud_topic_, 5);
@@ -206,7 +206,7 @@ void SemanticOctomapGeneratorNode::publish2DOccupancyMap(const SemanticOctree* o
   occ_map_pub_.publish(*occupancy_map);
 }
 
-void SemanticOctomapGeneratorNode::octomapCallback(const octomap_multi::Octomap_multi::ConstPtr& octomap_msg)
+void SemanticOctomapGeneratorNode::octomapCallback(const roam_mapping::Octomap_multi::ConstPtr& octomap_msg)
 {
   if (octomap_msg->agent_name == robot_name_)
   	return;
@@ -273,6 +273,11 @@ bool SemanticOctomapGeneratorNode::save(const char* filename) const
     return octomap_generator_->save(filename);
 }
 
+void SemanticOctomapGeneratorNode::setWriteSemantics(bool write)
+{
+  octomap_generator_->setWriteSemantics(write);
+}
+
 int main(int argc, char** argv)
 {
     ros::init(argc, argv, "octomap_multi");
@@ -287,15 +292,15 @@ int main(int argc, char** argv)
 
     if (!save_path_full.empty())
     {
-      octomapGeneratorNode.setWriteSemantics(true);
-      octomapGeneratorNode.save(save_path_full.c_str());
+      semanticOctomapGeneratorNode.setWriteSemantics(true);
+      semanticOctomapGeneratorNode.save(save_path_full.c_str());
       ROS_INFO("Full OctoMap saved.");
     }
     
     if (!save_path_color.empty())
     {
-      octomapGeneratorNode.setWriteSemantics(false);
-      octomapGeneratorNode.save(save_path_color.c_str());
+      semanticOctomapGeneratorNode.setWriteSemantics(false);
+      semanticOctomapGeneratorNode.save(save_path_color.c_str());
       ROS_INFO("Color OctoMap saved.");
     }
     
