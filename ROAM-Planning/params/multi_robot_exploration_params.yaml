@@ -20,7 +20,7 @@ planning:
   collision_check_period: 1
   
   multi:
-    num_agents: 6
+    num_agents: 3
     horizon: 5
     delta_q: 10.0
     gamma_q: 0.01

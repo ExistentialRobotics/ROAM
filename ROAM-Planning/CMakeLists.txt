@@ -40,7 +40,7 @@ set(SOURCE_FILES
         src/cpp/src/exploration/util.cpp
         )
 
-set(EXPLORATION_LIB_DESTINATION "${CATKIN_DEVEL_PREFIX}/lib/python2.7/dist-packages")
+set(EXPLORATION_LIB_DESTINATION "${CATKIN_DEVEL_PREFIX}/lib/python3/dist-packages")
 add_library(exploration_cpp SHARED ${PROJECT_SOURCE_DIR} ${SOURCE_FILES} src/cpp/src/exploration/python.cpp)
 target_link_libraries(exploration_cpp ${PYTHON_LIBRARIES})
 set_target_properties(exploration_cpp PROPERTIES SUFFIX ".so" PREFIX "_"
