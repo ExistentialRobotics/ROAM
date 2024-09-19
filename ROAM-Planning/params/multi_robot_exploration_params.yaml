@@ -1,40 +1,38 @@
 footprint:
-  type: 'tricky_circle'
+  type: 'jackal'
   angular_resolution: 0.01745
   inflation_scale: 1.3
 
 planning:
-  SE2_radius: 16.0
-  max_iter: 5
-  max_path_length: 100
-  step_size: 0.001
-  angular_range: 1.570796327
+  SE2_radius: 2 # epsilon_max, radius of the SE2 space pose sample
+  max_iter: 10 # k_p, maximux iters of traj optimization
+  max_path_length: 100 # max length of the path in meters
+  step_size: 0.001 # scale factor of time varing step size of local update
+  angular_range: 1.570796327 # sample parameters for pose approx 
   angular_samples: 32
   num_orientation_samples: 8
-  distance_coeff: 0.001
+  distance_coeff: 0.01 # gamma_c tradeoff between informativeness and collision avoidance
   theta_coeff: 0.1
   min_frontier_size: 30
-  goal_check_radius: 2.0
-  draw_radius: 15
+  goal_check_radius: 0.3 # radius of goal check for viewpoint planner
+  draw_radius: 2 # radius to clear obstacles around the robot in pixels!!!
   map_topic: '/$(arg name)/occupancy_map_2D'
   collision_check_period: 1
   
   multi:
-    num_agents: 3
-    horizon: 5
-    delta_q: 10.0
-    gamma_q: 0.01
-    robot_colision_coeff: 1000000
-    epsilon: 1
-    optimization_period: 0.1
-    should_plan_threshold: 0.3
-    need_plan_threshold: 0.2
-    need_plan_period: 1.0
+    num_agents: 2
+    horizon: 5 # sampling waypoints on path
+    delta_q: 10.0 # d_q = F + SE2_radius
+    gamma_q: 0.01 # trade off between between self informativeness and overlap FOV penalty
+    robot_colision_coeff: 2 # penalty for robot planned traj repeat, significantly impact gradient
+    epsilon: 0.1 # consensus step size
+    should_plan_threshold: 0.3 # thresh_p i.e. threshold to start alg3
+    need_plan_threshold: 0.2 # if less then this portion of the agents need to plan, all robots stop optimizing i.e. threshold to quit alg3
+    # quit alg3 when some robots finish planning and start to approach the goal
+    need_plan_period: 1.0 # t_p
 
 navigation:
-  tau: 0.005
-  alpha: 0.999
-  radius: 2.0
-  dist: 1.0
-  safety_dist: 1.0
+  tau: 0.005 # sleep time for navigator to publish the next waypoint
+  dist: 0.3 # dist to determine if the robot has reached the waypoint
+  safety_dist: 1.0 # peer safe distance
   publish_odom: true

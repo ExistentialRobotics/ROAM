@@ -5,7 +5,7 @@ octomap:
   # resolution: 0.3
   # max_range: 10.0
   # raycast_range: 0.5
-  resolution: 0.5
+  resolution: 0.2
   max_range: 15.0
   raycast_range: 10.0
   clamping_thres_min: 0.006692851
@@ -16,11 +16,11 @@ octomap:
   psi: 1
   phi: -0.3
   publish_2d_map: true
-  min_ground_z: -1.5
-  max_ground_z: 1.5
-  consensus_weight: 0.8
-  sub_timer: 10
-  pub_timer: 10
+  min_ground_z: 0.0
+  max_ground_z: 0.7
+  consensus_weight: 0.2
+  sub_timer: 5
+  pub_timer: 5
 
 # Camera intrinsic matrix parameters
 camera:
