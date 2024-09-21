@@ -47,7 +47,6 @@ def map_visulize(image_path, res = 1, origin = np.array([0, 0]), goal = None, ra
     ax.set_title('Map')
     if goal is not None and radius is not None:
         ax.add_patch(plt.Circle(goal, radius, color='r', alpha=0.3))
-    # plt.show()
     return ax
 
 class GradAscentMultiExplorationAgent:
@@ -55,11 +54,11 @@ class GradAscentMultiExplorationAgent:
         self.robot_name = '/' + rospy.get_param("~agent_name", 'husky')
         
         footprint_type = rospy.get_param(self.robot_name + '/footprint/type')
-        if not os.path.exists('/root/ws/map'):
-            os.makedirs('/root/ws/map')
-        files = os.listdir('/root/ws/map')
-        for f in files:
-            os.remove('/root/ws/map/' + f)    
+        # if not os.path.exists('/root/ws/map'):
+        #     os.makedirs('/root/ws/map')
+        # files = os.listdir('/root/ws/map')
+        # for f in files:
+        #     os.remove('/root/ws/map/' + f)    
         self.filter_obstacles_flag = False
         self.map_counter = 0
         if footprint_type == 'tricky_circle':
@@ -804,9 +803,9 @@ class GradAscentMultiExplorationAgent:
         plan_map_msg.data = tmp_occ_map_int.flatten().tolist()
         self.plan_map_msg = plan_map_msg
         self.plan_map_pub1.publish(plan_map_msg)
-        map_visulize(self.planning_map.data, self.planning_map.resolution, self.planning_map.origin)
-        plt.savefig('/root/ws/map/map%d.png'%self.map_counter)
-        plt.clf()
+        # map_visulize(self.planning_map.data, self.planning_map.resolution, self.planning_map.origin)
+        # plt.savefig('/root/ws/map/map%d.png'%self.map_counter)
+        # plt.clf()
         self.map_counter += 1
         # plt.show()
         for pose in path:
