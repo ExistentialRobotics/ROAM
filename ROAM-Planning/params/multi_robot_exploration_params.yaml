@@ -1,7 +1,7 @@
 footprint:
   type: 'jackal'
   angular_resolution: 0.01745
-  inflation_scale: 1.3
+  inflation_scale: 1.4
 
 planning:
   SE2_radius: 2 # epsilon_max, radius of the SE2 space pose sample
@@ -15,7 +15,10 @@ planning:
   theta_coeff: 0.1
   min_frontier_size: 30
   goal_check_radius: 0.3 # radius of goal check for viewpoint planner
-  draw_radius: 2 # radius to clear obstacles around the robot in pixels!!!
+  draw_radius: 0.4 # radius to clear obstacles around the robot in meters
+  clean_kernel_size: 0.8 # size of the mask for closing unknown space in meters
+  erode_kernel_size: 0.8 # size of the mask for eroding free sapce in meters
+  median_filter_enable: false # enable median filter for pepper noise, only enable if your map is fine enough to speed up planning
   map_topic: '/$(arg name)/occupancy_map_2D'
   collision_check_period: 1
   
@@ -24,15 +27,15 @@ planning:
     horizon: 5 # sampling waypoints on path
     delta_q: 10.0 # d_q = F + SE2_radius
     gamma_q: 0.01 # trade off between between self informativeness and overlap FOV penalty
-    robot_colision_coeff: 2 # penalty for robot planned traj repeat, significantly impact gradient
+    robot_colision_coeff: 5 # penalty for robot planned similar view point, significantly impact gradient
     epsilon: 0.1 # consensus step size
-    should_plan_threshold: 0.3 # thresh_p i.e. threshold to start alg3
-    need_plan_threshold: 0.2 # if less then this portion of the agents need to plan, all robots stop optimizing i.e. threshold to quit alg3
+    should_plan_threshold: 0.4 # thresh_p i.e. threshold to start alg3
+    need_plan_threshold: 0.3 # if less then this portion of the agents need to plan, all robots stop optimizing i.e. threshold to quit alg3
     # quit alg3 when some robots finish planning and start to approach the goal
     need_plan_period: 1.0 # t_p
 
 navigation:
   tau: 0.005 # sleep time for navigator to publish the next waypoint
   dist: 0.3 # dist to determine if the robot has reached the waypoint
-  safety_dist: 1.0 # peer safe distance
+  safety_dist: 0.1 # peer safe distance
   publish_odom: true

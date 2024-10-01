@@ -17,7 +17,6 @@ from std_msgs.msg import Empty, Header
 from geometry_msgs.msg import PoseStamped
 from rospy.numpy_msg import numpy_msg
 from rospy_tutorials.msg import Floats
-import os
 from utilities.frontier_utils import extract_frontiers, cleanup_map_for_planning
 from footprints.footprint_points import get_tricky_circular_footprint, get_tricky_oval_footprint, get_jackal_footprint
 from footprints.footprints import CustomFootprint
@@ -52,15 +51,8 @@ def map_visulize(image_path, res = 1, origin = np.array([0, 0]), goal = None, ra
 class GradAscentMultiExplorationAgent:
     def __init__(self):
         self.robot_name = '/' + rospy.get_param("~agent_name", 'husky')
-        
         footprint_type = rospy.get_param(self.robot_name + '/footprint/type')
-        # if not os.path.exists('/root/ws/map'):
-        #     os.makedirs('/root/ws/map')
-        # files = os.listdir('/root/ws/map')
-        # for f in files:
-        #     os.remove('/root/ws/map/' + f)    
-        self.filter_obstacles_flag = False
-        self.map_counter = 0
+        self.filter_obstacles_flag = rospy.get_param(self.robot_name + '/planning/median_filter_enable')
         if footprint_type == 'tricky_circle':
             footprint_points = get_tricky_circular_footprint()
         elif footprint_type == 'tricky_oval':
@@ -135,7 +127,7 @@ class GradAscentMultiExplorationAgent:
         self.waypoint_inds = None
         self.goal = None
         self.goal_check_radius = rospy.get_param(self.robot_name + '/planning/goal_check_radius')
-        self.draw_radius = rospy.get_param(self.robot_name + '/planning/draw_radius')
+        self.draw_radius = int(np.round(rospy.get_param(self.robot_name + '/planning/draw_radius')/rospy.get_param(self.robot_name + '/octomap/resolution')))
         
         self.map_sub = rospy.Subscriber(rospy.get_param(self.robot_name + '/planning/map_topic'), OccupancyGrid, self.map_callback)
         self.collision_check_timer = rospy.get_time()
@@ -181,11 +173,12 @@ class GradAscentMultiExplorationAgent:
         self.vectorized_rc = None
         self.vectorized_xy = None
         self.eval_cells = None
-        self.kernel_cleanup = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
-        self.kernel_erosion = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
-        # self.kernel_cleanup = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
-        # self.kernel_erosion = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
-        self.plan_map_pub1 = rospy.Publisher(self.robot_name + "/PLANMAP1", OccupancyGrid, queue_size = 1, latch=True)
+        clean_kernel_size = int(round(rospy.get_param(self.robot_name + '/planning/clean_kernel_size')\
+            / rospy.get_param(self.robot_name + '/octomap/resolution')))
+        erode_kernel_size = int(round(rospy.get_param(self.robot_name + '/planning/erode_kernel_size')\
+            / rospy.get_param(self.robot_name + '/octomap/resolution')))
+        self.kernel_cleanup = cv2.getStructuringElement(cv2.MORPH_RECT, (clean_kernel_size, clean_kernel_size))
+        self.kernel_erosion = cv2.getStructuringElement(cv2.MORPH_RECT, (erode_kernel_size, erode_kernel_size))
         self.plan_map_pub = rospy.Publisher(self.robot_name + "/PLANMAP", OccupancyGrid, queue_size = 1, latch=True) 
         rospy.sleep(1)
         print('Multi agent exploration agent \'{}\' initialized!'.format(self.robot_name))
@@ -220,8 +213,6 @@ class GradAscentMultiExplorationAgent:
     def optimize_pose(self):
         if self.is_planning:
             return
-        
-        # print('IN OPTIMIZE_POSE Planning started for agent \'{}\'!'.format(self.robot_name))
         self.is_planning = True
         self.consensus_delta = None
         self.received_team_path_num = 0
@@ -281,6 +272,9 @@ class GradAscentMultiExplorationAgent:
         self.is_planning = False
     
     def make_init_plan(self):
+        '''
+        Initialize team path for all robots by planning to frontiers or failsafe path
+        '''
         print('{}: LOOKING FOR FRONTIERS!'.format(self.robot_name))
         if self.raytrace_precomputed is None:
             print('{}: Initializing ray-tracing!'.format(self.robot_name))
@@ -320,15 +314,13 @@ class GradAscentMultiExplorationAgent:
                 rospy.sleep(0.1)
 
             self.planning_map.data = np.array(self.planning_map.data)
-            # self.footprint.draw_circumscribed(robot_pose, self.planning_map, self.draw_radius)
+            self.footprint.draw_circumscribed(robot_pose, self.planning_map, self.draw_radius)
             path = self.compute_frontier_path(robot_pose)
             
             if path.shape[0] >= self.horizon:
-                # print('length of path before sampling: ', path.shape[0])
                 path_inds = np.linspace(0, path.shape[0], self.horizon, endpoint=False).astype(int)
                 path_sampled = path[path_inds]
             else:
-                # print('length of path: ', path.shape[0])
                 path_sampled = np.zeros((self.horizon, 3))
                 path_sampled[:path.shape[0]] = path
                 path_sampled[path.shape[0]:] = path[-1]
@@ -343,14 +335,10 @@ class GradAscentMultiExplorationAgent:
         robot_pose_forward = robot_pose.copy()
         robot_pose_forward[0] = robot_pose[0] + 1 * np.cos(robot_pose[2])
         robot_pose_forward[1] = robot_pose[1] + 1 * np.sin(robot_pose[2])
-
-        # print("%d frontiers found!" % len(frontiers))
         if frontiers is not None:
             for i, f in enumerate(frontiers):
                 if np.linalg.norm(robot_pose_forward[:2] - f[:2]) < 1:
                     continue
-                # print("FINDING PATH TO FRONTIER: ", f)
-                # why do we need to set 127 as obstacles
                 plan_success, path = oriented_astar(start=robot_pose_forward,
                                                     occupancy_map=self.planning_map,
                                                     footprint=self.footprint,
@@ -459,7 +447,7 @@ class GradAscentMultiExplorationAgent:
         '''
         return true only when robot has map,
         not planning,
-        haven't reach current goal
+        and is close enough to the goal or has no goal
         '''
         if self.planning_map is None:
             return False
@@ -483,7 +471,6 @@ class GradAscentMultiExplorationAgent:
         find the nearest collision point and find new path to waypoints after it
         do this check only when we have path generated before or from other func and currently not planning
         '''
-        # print('{}: New map received! MAP CALLBACK START'.format(self.robot_name))
         if not self.is_planning:
             plan_map_msg = OccupancyGrid()
             plan_map_msg.header = occ_map_msg.header
@@ -501,14 +488,9 @@ class GradAscentMultiExplorationAgent:
             resolution = occ_map_msg.info.resolution
 
             self.planning_map = Costmap(occupancy_map, resolution, origin)
-            # CHECK HERE 
             self.planning_map = cleanup_map_for_planning(occupancy_map=self.planning_map, kernel=self.kernel_cleanup, filter_obstacles=self.filter_obstacles_flag)
             self.planning_map.data = cv2.erode(self.planning_map.data, self.kernel_erosion, iterations=1)
             tmp_occ_map = self.planning_map.data.copy()
-            # map_visulize(tmp_occ_map, res=self.planning_map.resolution, origin=self.planning_map.origin)
-            # plt.savefig('/root/ws/map/map%d.png'%self.map_counter)
-            # plt.clf()
-            self.map_counter += 1
             tmp_occ_map_int = np.zeros_like(tmp_occ_map, dtype=np.int8) 
             tmp_occ_map_int[tmp_occ_map == Costmap.UNEXPLORED] = -1
             tmp_occ_map_int[tmp_occ_map == Costmap.FREE] = 0    
@@ -524,7 +506,6 @@ class GradAscentMultiExplorationAgent:
                 check_collision = True
             
             if self.curr_path is not None and check_collision:
-                # print("Start checking collision!")
                 pixel_path = xy_to_rc(self.curr_path, self.planning_map)
                 try:
                     # find out the index of collision of current path
@@ -533,13 +514,10 @@ class GradAscentMultiExplorationAgent:
                     return
                 
                 if collision_inds.shape[0] > 0:
-                    # print("collision_inds: ", collision_inds)
-                    # print('{}: Collision ahead!'.format(self.robot_name))
                     self.collision_pub.publish(Empty())
                     
                     self.is_planning = True
                     
-                    # print("waypoint_inds: ", self.waypoint_inds)
                     rem_waypoint_inds = self.waypoint_inds[self.waypoint_inds > collision_inds[0]]
                     rem_waypoints = self.curr_path[rem_waypoint_inds, :]
                     
@@ -547,9 +525,7 @@ class GradAscentMultiExplorationAgent:
                     self.footprint.draw_circumscribed(robot_pose, self.planning_map, self.draw_radius)
                     full_path = robot_pose[None, :]
                     self.waypoint_inds = np.array([0], dtype=int)
-                    # print("rem_waypoints: ", rem_waypoint_inds)
                     for pose in rem_waypoints:
-                        # print("Replan to waypoint: ", pose)
                         plan_success, partial_path = oriented_astar(start=full_path[-1], occupancy_map=self.planning_map, footprint=self.footprint, 
                                                                     obstacle_values=[Costmap.OCCUPIED], epsilon=1, goal=pose)
                         if plan_success:
@@ -713,9 +689,7 @@ class GradAscentMultiExplorationAgent:
         return frontier_goals, frontier_size
         
     def get_failsafe_path(self, state):
-        # rospy.loginfo("111111111ENTERED FAILSAFE PATH")
         path = None
-        self.plan_map_pub.publish(self.plan_map_msg)
         while path is None:
             random_start, start_sample_success = self.sample_free_pose()
             random_goal, goal_sample_success = self.sample_free_pose()
@@ -732,7 +706,6 @@ class GradAscentMultiExplorationAgent:
                     if path_length > self.goal_check_radius:
                         pixel_path = xy_to_rc(random_path, self.planning_map)
                         try:
-                            # also, why check again here?
                                 collision_inds = np.nonzero(self.planning_map.data[pixel_path[:, 0].astype(int),
                                                                                         pixel_path[:, 1].astype(int)] == Costmap.OCCUPIED)[0]
                                 if collision_inds.shape[0] == 0:
@@ -742,8 +715,6 @@ class GradAscentMultiExplorationAgent:
             rospy.sleep(0.2)
         assert path is not None, "Fail-safe path generation failed!"
         print(self.robot_name+" Fail-safe path generated!") 
-        # data1 = self.planning_map.data.copy()
-        # data2 = path.copy()
         return path
     
     def sample_free_pose(self):
@@ -785,29 +756,6 @@ class GradAscentMultiExplorationAgent:
         robot_pose = self.get_pose_from_tf(self.robot_frame_id)
         full_path = robot_pose[None, :]
         self.waypoint_inds = np.array([0], dtype=int)
-        tmp_occ_map = self.planning_map.data.copy()
-        plan_map_msg = OccupancyGrid()
-        plan_map_msg.header = Header()
-        plan_map_msg.header.stamp = rospy.Time.now()
-        plan_map_msg.header.frame_id = self.world_frame_id
-        plan_map_msg.info.resolution = self.planning_map.resolution
-        plan_map_msg.info.width = self.planning_map.data.shape[1]
-        plan_map_msg.info.height = self.planning_map.data.shape[0]
-        plan_map_msg.info.origin.position.x = self.planning_map.origin[0]
-        plan_map_msg.info.origin.position.y = self.planning_map.origin[1]
-        tmp_occ_map_int = np.zeros_like(tmp_occ_map, dtype=np.int8) 
-        tmp_occ_map_int[tmp_occ_map == Costmap.UNEXPLORED] = -1
-        tmp_occ_map_int[tmp_occ_map == Costmap.FREE] = 0    
-        tmp_occ_map_int[tmp_occ_map == Costmap.OCCUPIED] = 100
-        tmp_occ_map_int = np.flipud(tmp_occ_map_int)
-        plan_map_msg.data = tmp_occ_map_int.flatten().tolist()
-        self.plan_map_msg = plan_map_msg
-        self.plan_map_pub1.publish(plan_map_msg)
-        # map_visulize(self.planning_map.data, self.planning_map.resolution, self.planning_map.origin)
-        # plt.savefig('/root/ws/map/map%d.png'%self.map_counter)
-        # plt.clf()
-        self.map_counter += 1
-        # plt.show()
         for pose in path:
             print('waypoint: ', pose)
             plan_success, partial_path = oriented_astar(start=full_path[-1],
@@ -817,7 +765,6 @@ class GradAscentMultiExplorationAgent:
                                                         epsilon=1,
                                                         goal=pose)
             if plan_success:
-                # Why we check the collision here when plan_success is True? Plan scale in cpp function is default to 1
                 pixel_path = xy_to_rc(partial_path, self.planning_map)
                 try:
                     collision_inds = np.nonzero(self.planning_map.data[pixel_path[:, 0].astype(int),
@@ -828,9 +775,7 @@ class GradAscentMultiExplorationAgent:
                     else:
                         raise ValueError('Collision detected in the path!')
                 except IndexError:
-                    print('IndexError11111111111111111111111111111111111')
                     continue
-        # assert full_path.shape[0] > 1, "Path generation failed!"            
         if len(full_path.shape) > 1:
             path_length = 0
             curr_pose = full_path[0]

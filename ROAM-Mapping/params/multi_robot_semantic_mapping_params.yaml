@@ -5,7 +5,7 @@ octomap:
   # resolution: 0.3
   # max_range: 10.0
   # raycast_range: 0.5
-  resolution: 0.2
+  resolution: 0.3
   max_range: 15.0
   raycast_range: 10.0
   clamping_thres_min: 0.006692851
