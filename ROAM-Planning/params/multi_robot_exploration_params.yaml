@@ -15,22 +15,22 @@ planning:
   theta_coeff: 0.1
   min_frontier_size: 30
   goal_check_radius: 0.3 # radius of goal check for viewpoint planner
-  draw_radius: 0.4 # radius to clear obstacles around the robot in meters
-  clean_kernel_size: 0.8 # size of the mask for closing unknown space in meters
+  draw_radius: 0.2 # radius to clear obstacles around the robot in meters
+  clean_kernel_size: 0.6 # size of the mask for closing unknown space in meters
   erode_kernel_size: 0.8 # size of the mask for eroding free sapce in meters
   median_filter_enable: false # enable median filter for pepper noise, only enable if your map is fine enough to speed up planning
   map_topic: '/$(arg name)/occupancy_map_2D'
   collision_check_period: 1
   
   multi:
-    num_agents: 2
+    num_agents: 4
     horizon: 5 # sampling waypoints on path
     delta_q: 10.0 # d_q = F + SE2_radius
     gamma_q: 0.01 # trade off between between self informativeness and overlap FOV penalty
     robot_colision_coeff: 5 # penalty for robot planned similar view point, significantly impact gradient
     epsilon: 0.1 # consensus step size
-    should_plan_threshold: 0.4 # thresh_p i.e. threshold to start alg3
-    need_plan_threshold: 0.3 # if less then this portion of the agents need to plan, all robots stop optimizing i.e. threshold to quit alg3
+    should_plan_threshold: 0.1 # thresh_p i.e. threshold to start alg3
+    need_plan_threshold: 0.1 # if less then this portion of the agents need to plan, all robots stop optimizing i.e. threshold to quit alg3
     # quit alg3 when some robots finish planning and start to approach the goal
     need_plan_period: 1.0 # t_p
 

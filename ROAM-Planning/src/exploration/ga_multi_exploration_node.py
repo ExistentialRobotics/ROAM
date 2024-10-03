@@ -25,28 +25,6 @@ from utilities.util import rc_to_xy, wrap_angles, xy_to_rc
 from mapping.costmap import Costmap
 from utilities.sensor_utils import bresenham2d, bresenham2d_with_intensities
 
-def map_visulize(image_path, res = 1, origin = np.array([0, 0]), goal = None, radius = None):
-    if isinstance(image_path, str):
-        img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-        if img is None:
-            raise FileNotFoundError(f'Image file not found: {image_path}')
-    elif isinstance(image_path, np.ndarray):
-        img = image_path
-    else:
-        raise ValueError('Invalid image path')
-    img_height, img_width = img.shape
-    img = np.flipud(img)
-    map_width = img_width * res
-    map_height = img_height * res
-    fig, ax = plt.subplots()
-    extent = [origin[0], origin[0] + map_width, origin[1], origin[1] + map_height]
-    ax.imshow(img, cmap='gray', extent=extent, origin='lower')
-    ax.set_xlabel('X (meters)')
-    ax.set_ylabel('Y (meters)')
-    ax.set_title('Map')
-    if goal is not None and radius is not None:
-        ax.add_patch(plt.Circle(goal, radius, color='r', alpha=0.3))
-    return ax
 
 class GradAscentMultiExplorationAgent:
     def __init__(self):
@@ -69,6 +47,14 @@ class GradAscentMultiExplorationAgent:
         else:
             footprint_points = None
             assert False and "footprint type specified not supported."
+
+        clean_kernel_size = int(round(rospy.get_param(self.robot_name + '/planning/clean_kernel_size')\
+            / rospy.get_param(self.robot_name + '/octomap/resolution')))
+        erode_kernel_size = int(round(rospy.get_param(self.robot_name + '/planning/erode_kernel_size')\
+            / rospy.get_param(self.robot_name + '/octomap/resolution')))
+        self.kernel_cleanup = cv2.getStructuringElement(cv2.MORPH_RECT, (clean_kernel_size, clean_kernel_size))
+        self.kernel_erosion = cv2.getStructuringElement(cv2.MORPH_RECT, (erode_kernel_size, erode_kernel_size))
+        self.plan_map_pub = rospy.Publisher(self.robot_name + "/PLANMAP", OccupancyGrid, queue_size = 1, latch=True) 
 
         self.footprint = CustomFootprint(footprint_points=footprint_points,
                                           angular_resolution=np.pi / 4,
@@ -173,13 +159,6 @@ class GradAscentMultiExplorationAgent:
         self.vectorized_rc = None
         self.vectorized_xy = None
         self.eval_cells = None
-        clean_kernel_size = int(round(rospy.get_param(self.robot_name + '/planning/clean_kernel_size')\
-            / rospy.get_param(self.robot_name + '/octomap/resolution')))
-        erode_kernel_size = int(round(rospy.get_param(self.robot_name + '/planning/erode_kernel_size')\
-            / rospy.get_param(self.robot_name + '/octomap/resolution')))
-        self.kernel_cleanup = cv2.getStructuringElement(cv2.MORPH_RECT, (clean_kernel_size, clean_kernel_size))
-        self.kernel_erosion = cv2.getStructuringElement(cv2.MORPH_RECT, (erode_kernel_size, erode_kernel_size))
-        self.plan_map_pub = rospy.Publisher(self.robot_name + "/PLANMAP", OccupancyGrid, queue_size = 1, latch=True) 
         rospy.sleep(1)
         print('Multi agent exploration agent \'{}\' initialized!'.format(self.robot_name))
 
