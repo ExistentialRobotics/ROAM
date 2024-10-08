@@ -25,6 +25,11 @@ ROAM is implemented as two ROS packages, can be built on x86-64 and ARM-based pr
     </a>
 </p>
 
+## Gazebo Demonstration
+
+Please check https://github.com/ExistentialRobotics/ROAM-Example for a Gazebo demo of ROAM.
+
+
 ## Citation
 
 If you found this work useful, we would appreciate if you could cite our work:
