@@ -12,11 +12,11 @@
 		  <param name="agent_name" value="$(arg name)"/>
 		</node>
 
-		<!-- Optional: you can use this simple tracking and navigation node in order to execute the computed path.
+		<!-- Optional: you can use this simple tracking and navigation node in order to execute the computed path. -->
 		<node name="path_navigation_node" pkg="roam_planning" type="simple_path_navigation_node.py" output="screen" respawn="true">
 		  <param name="agent_name" value="$(arg name)"/>
 		</node>
-		-->
+		
 		
 	</group>
 
