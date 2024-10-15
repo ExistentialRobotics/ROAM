@@ -9,8 +9,6 @@ import tf
 import cv2
 
 import numpy as np
-import matplotlib.pyplot as plt
-
 from nav_msgs.msg import OccupancyGrid
 from nav_msgs.msg import Path
 from std_msgs.msg import Empty, Header
@@ -251,9 +249,6 @@ class GradAscentMultiExplorationAgent:
         self.is_planning = False
     
     def make_init_plan(self):
-        '''
-        Initialize team path for all robots by planning to frontiers or failsafe path
-        '''
         print('{}: LOOKING FOR FRONTIERS!'.format(self.robot_name))
         if self.raytrace_precomputed is None:
             print('{}: Initializing ray-tracing!'.format(self.robot_name))
@@ -423,11 +418,6 @@ class GradAscentMultiExplorationAgent:
         return np.array([translation[0], translation[1], euler[2]])
 
     def check_ready(self):
-        '''
-        return true only when robot has map,
-        not planning,
-        and is close enough to the goal or has no goal
-        '''
         if self.planning_map is None:
             return False
     
@@ -445,15 +435,7 @@ class GradAscentMultiExplorationAgent:
                 return False
 
     def map_callback(self, occ_map_msg):
-        '''
-        using new map to check if planned path has collision, if does,
-        find the nearest collision point and find new path to waypoints after it
-        do this check only when we have path generated before or from other func and currently not planning
-        '''
         if not self.is_planning:
-            plan_map_msg = OccupancyGrid()
-            plan_map_msg.header = occ_map_msg.header
-            plan_map_msg.info = occ_map_msg.info
             
             occupancy_map = 255 - np.array(occ_map_msg.data, dtype=np.uint8)
             occupancy_map = occupancy_map.reshape((occ_map_msg.info.height,
@@ -475,9 +457,12 @@ class GradAscentMultiExplorationAgent:
             tmp_occ_map_int[tmp_occ_map == Costmap.FREE] = 0    
             tmp_occ_map_int[tmp_occ_map == Costmap.OCCUPIED] = 100
             tmp_occ_map_int = np.flipud(tmp_occ_map_int)
-            plan_map_msg.data = tmp_occ_map_int.flatten().tolist()
-            self.plan_map_msg = plan_map_msg
-            self.plan_map_pub.publish(plan_map_msg)
+            # plan_map_msg = OccupancyGrid()
+            # plan_map_msg.header = occ_map_msg.header
+            # plan_map_msg.info = occ_map_msg.info
+            # plan_map_msg.data = tmp_occ_map_int.flatten().tolist()
+            # self.plan_map_msg = plan_map_msg
+            # self.plan_map_pub.publish(plan_map_msg)
             check_collision = False
             curr_time = rospy.get_time()
             if (curr_time - self.collision_check_timer) > self.collision_check_period:
@@ -487,7 +472,6 @@ class GradAscentMultiExplorationAgent:
             if self.curr_path is not None and check_collision:
                 pixel_path = xy_to_rc(self.curr_path, self.planning_map)
                 try:
-                    # find out the index of collision of current path
                     collision_inds = np.nonzero(self.planning_map.data[pixel_path[:, 0].astype(int),pixel_path[:, 1].astype(int)] == Costmap.OCCUPIED)[0]
                 except IndexError:
                     return
@@ -736,7 +720,7 @@ class GradAscentMultiExplorationAgent:
         full_path = robot_pose[None, :]
         self.waypoint_inds = np.array([0], dtype=int)
         for pose in path:
-            print('waypoint: ', pose)
+            # print('waypoint: ', pose)
             plan_success, partial_path = oriented_astar(start=full_path[-1],
                                                         occupancy_map=self.planning_map,
                                                         footprint=self.footprint,
