@@ -1,0 +1,354 @@
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-10550309-8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-10550309-8');
+</script>
+
+<script src="http://www.google.com/jsapi" type="text/javascript"></script>
+<script type="text/javascript">google.load("jquery", "1.3.2");</script>
+
+<style type="text/css">
+    body {
+        font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+        font-weight:300;
+        font-size:18px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 1100px;
+    }
+
+    h1 {
+        font-weight:300;
+    }
+
+    .disclaimerbox {
+        background-color: #eee;
+        border: 1px solid #eeeeee;
+        border-radius: 10px ;
+        -moz-border-radius: 10px ;
+        -webkit-border-radius: 10px ;
+        padding: 20px;
+    }
+
+    video.header-vid {
+        height: 140px;
+        border: 1px solid black;
+        border-radius: 10px ;
+        -moz-border-radius: 10px ;
+        -webkit-border-radius: 10px ;
+    }
+
+    img.header-img {
+        height: 140px;
+        border: 1px solid black;
+        border-radius: 10px ;
+        -moz-border-radius: 10px ;
+        -webkit-border-radius: 10px ;
+    }
+
+    img.rounded {
+        border: 1px solid #eeeeee;
+        border-radius: 10px ;
+        -moz-border-radius: 10px ;
+        -webkit-border-radius: 10px ;
+    }
+
+    a:link,a:visited
+    {
+        color: #1367a7;
+        text-decoration: none;
+    }
+    a:hover {
+        color: #208799;
+    }
+
+    td.dl-link {
+        height: 160px;
+        text-align: center;
+        font-size: 22px;
+    }
+
+    .layered-paper-big { /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+        box-shadow:
+                0px 0px 1px 1px rgba(0,0,0,0.35), /* The top layer shadow */
+                5px 5px 0 0px #fff, /* The second layer */
+                5px 5px 1px 1px rgba(0,0,0,0.35), /* The second layer shadow */
+                10px 10px 0 0px #fff, /* The third layer */
+                10px 10px 1px 1px rgba(0,0,0,0.35), /* The third layer shadow */
+                15px 15px 0 0px #fff, /* The fourth layer */
+                15px 15px 1px 1px rgba(0,0,0,0.35), /* The fourth layer shadow */
+                20px 20px 0 0px #fff, /* The fifth layer */
+                20px 20px 1px 1px rgba(0,0,0,0.35), /* The fifth layer shadow */
+                25px 25px 0 0px #fff, /* The fifth layer */
+                25px 25px 1px 1px rgba(0,0,0,0.35); /* The fifth layer shadow */
+        margin-left: 10px;
+        margin-right: 45px;
+    }
+
+
+    .layered-paper { /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+        box-shadow:
+                0px 0px 1px 1px rgba(0,0,0,0.35), /* The top layer shadow */
+                5px 5px 0 0px #fff, /* The second layer */
+                5px 5px 1px 1px rgba(0,0,0,0.35), /* The second layer shadow */
+                10px 10px 0 0px #fff, /* The third layer */
+                10px 10px 1px 1px rgba(0,0,0,0.35); /* The third layer shadow */
+        margin-top: 5px;
+        margin-left: 10px;
+        margin-right: 30px;
+        margin-bottom: 5px;
+    }
+
+    .vert-cent {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    hr
+    {
+        border: 0;
+        height: 1.5px;
+        background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+    }
+</style>
+
+<html>
+  <head>
+        <title>ROAM</title>
+        <meta property="og:title" content="ROAM" />
+        <meta property="og:image" content="" />
+        <meta property="og:url" content="" />
+  </head>
+
+  <body>
+    <br>
+    <center>
+    <span style="font-size:42px">ROAM: Riemannian Optimization for Active Mapping <br /> with Robot Teams</a></span>
+    
+    </center>
+
+    <br><br>
+      <table align=center width=800px>
+       <tr>
+         <td align=center width=100px>
+         <center>
+         <span style="font-size:20px"><a href="https://arashasgharivaskasi-bc.github.io/">Arash Asgharivaskasi</a></span>
+         </center>
+         </td>
+         
+         <td align=center width=100px>
+         <center>
+         <span style="font-size:20px">Fritz Girke</a></span>
+         </center>
+         </td>
+
+        <td align=center width=100px>
+        <center>
+        <span style="font-size:20px"><a href="https://natanaso.github.io/">Nikolay Atanasov</a></span>
+        </center>
+        </td>
+     </tr>
+    </table>
+
+    <table align=center width=700px>
+       <tr>
+        <td align=center width=100px>
+        <center>
+        <span style="font-size:20px"> <a href="http://ece.ucsd.edu">Department of Electrical and Computer Engineering</a> <br> <a href="https://contextualrobotics.ucsd.edu">Contextual Robotics Institute</a> <br> <a href="https://ucsd.edu/">University of California, San Diego</a></span>
+        </center>
+        </td>
+        
+        <td align=center width=100px>
+        <center>
+        <span style="font-size:20px"> <a href="https://www.cit.tum.de/en/cit/home/">School of Computation, Information and Technology</a> <br> <a href="https://www.tum.de/en/">Technical University of Munich</a></span>
+        </center>
+        </td>
+     </tr>
+    </table>
+
+    <br>
+
+    <table align=center width=800px>
+      <tr>
+       <td align=center width=100px>
+       <center>
+       <span style="font-size:20px"><a href="https://arxiv.org/pdf/2404.18321">[Journal Paper]</a></span>
+       </center>
+       </td>
+
+       <td align=center width=100px>
+       <center>
+       <span style="font-size:20px"><a href="https://github.com/ExistentialRobotics/ROAM">[Source Code]</a></span>
+       </center>
+       </td>
+      </tr>
+    </table>
+
+<br>
+
+    Autonomous exploration of unknown environments using a team of mobile robots demands distributed perception and planning strategies to enable efficient and scalable performance. Ideally, each robot should update its map and plan its motion not only relying on its own observations, but also considering the observations of its peers. Centralized solutions to multi-robot coordination are susceptible to central node failure and require a sophisticated communication infrastructure for reliable operation. Current decentralized active mapping methods consider simplistic robot models with linear-Gaussian observations and Euclidean robot states. In this work, we present a distributed multi-robot mapping and planning method, called <b>Riemannian Optimization for Active Mapping (ROAM)</b>. We formulate an optimization problem over a graph with node variables belonging to a Riemannian manifold and a consensus constraint requiring feasible solutions to agree on the node variables. We develop a distributed Riemannian optimization algorithm that relies only on one-hop communication to solve the problem <b>with consensus and optimality guarantees</b>. We show that multi-robot active mapping can be achieved via two applications of our distributed Riemannian optimization over different manifolds: distributed estimation of a 3-D semantic map and distributed planning of SE(3) trajectories that minimize map uncertainty. We demonstrate the performance of ROAM in simulation and real-world experiments using a team of robots with RGB-D cameras.
+
+            <br>
+
+    <hr>
+
+    <center><h2>Problem</h2></center>
+    In this work, we want to collaboratively explore an unknown environment using a team of robots in a distributed manner. Each robot is equipped with on-board sensing and processing hardware as well as peer-to-peer communication, which can be utilized for computing, sending, and receiving local maps and plans to/from their peers.
+    <br><br>
+    <tr>
+      <td width=720px>
+      <center>
+          <a><img src = "./assets/prob.png" height="250px"></img></a><br>
+      </center>
+      </td>
+    </tr>
+
+    <center><h2>Approach</h2></center>
+    We decompose the problem of distributed multi-robot exploration into distributed mapping and distributed planning problems.
+    
+    <br><br>
+    
+    In distributed mapping, the goal is to construct a globally consistent common 3-D semantic map of the environment, given local semantically-annotated point clouds. This can be formulated as distributed maximization of observation log-likelihood, subject to a consensus constraint.
+    <tr>
+      <td width=720px>
+      <center>
+          <a><img src = "./assets/ROAM_1.png" height="275px"></img></a><br>
+      </center>
+      </td>
+    </tr>
+    
+    For distributed planning, we aim to find a SE(3) team trajectory that maximizes the information of the future observations and safety of the path, given the global common map computed from the distributed mapping. This can be formulated as distributed maximization of a differentiable collision and perception-aware objective function of the team trajectory, subject to a consensus constraint.
+    <br><br>
+    <tr>
+      <td width=720px>
+      <center>
+          <a><img src = "./assets/ROAM_2.png" height="275px"></img></a><br>
+      </center>
+      </td>
+    </tr>
+    <br>
+
+    We propose a general distributed Riemannian optimization framework that interleaves local objective function optimization with consensus updates in an iterative way. The problems of distributed mapping and distributed planning for exploration can both be formulated as two applications of our distributed Riemannian optimization, where the domain manifold is the space of probability distributions and SE(3) poses, respectively. Our proposed distributed multi-robot exploration method is called <b>ROAM: Riemannian Optimization for Active Mapping</b>.
+    
+    <tr>
+      <td width=720px>
+      <center>
+          <a><img src = "./assets/ROAM_3.png" height="275px"></img></a><br>
+      </center>
+      </td>
+    </tr>
+    
+    <hr>
+    
+    <center><h1>Videos</h1></center>
+    
+    <center><h2>Presentation</h2></center>
+    <tr>    
+      <td width=600px>
+        <center>
+          <div class = "video">
+            <iframe width="400" height="240" src="https://www.youtube.com/embed/EADUWRSkOKs" frameborder="0" allowfullscreen></iframe>
+         </div>
+        </center>
+      </td>
+    </tr>
+    
+    <center><h2>Demo</h2></center>
+    <table align=center width=900px>
+        <tr>
+            <td width=600px>
+              <center>
+                <div class = "video">
+                  <iframe width=400" height="240" src="https://www.youtube.com/embed/tXFkHZsfTwY?si=T4RxxwYGC_qM3Qsm" frameborder="0" allowfullscreen></iframe>
+                  <figcaption>Distributed Multi-robot Exploration | Real-world</figcaption>
+               </div>
+            </center>
+            </td>
+            
+            <td width=600px>
+              <center>
+                <div class = "video">
+                  <iframe width="400" height="240" src="https://www.youtube.com/embed/BHvtxQ2_Onk?si=WgVhwwWCWgdC0LlH" frameborder="0" allowfullscreen></iframe>
+                  <figcaption>Distributed Multi-robot Exploration | Unity Simulation</figcaption>
+               </div>
+            </center>
+            </td>
+        </tr>
+    </table>
+    
+    <br>
+    
+    <table align=center width=900px>
+        <tr>
+            <td width=600px>
+              <center>
+                <div class = "video">
+                  <iframe width="400" height="240" src="https://www.youtube.com/embed/9v2ASsc2Y-A?si=H1a8CqHWwLioW2C2" frameborder="0" allowfullscreen></iframe>
+                  <figcaption>Distributed Multi-robot Mapping | Manual Control</figcaption>
+               </div>
+            </center>
+            </td>
+            
+            <td width=600px>
+              <center>
+                <div class = "video">
+                  <iframe width="400" height="240" src="https://www.youtube.com/embed/s-2GM1PSah4?si=StqjExlM8FDhsYvc" frameborder="0" allowfullscreen></iframe>
+                  <figcaption>Single-robot Autonomous Exploration</figcaption>
+               </div>
+            </center>
+            </td>
+        </tr>
+    </table>
+    
+    <br>
+    <hr>
+
+    <center><h1>Citation</h1></center>
+    <table align=center width=800px>
+      <tr><left>
+      If you find our paper/code useful for your research, please cite our work as follows:
+      <br>
+      </left></tr>
+      <tr><left> <br>
+                  <span style="font-size:18px">A. Asgharivaskasi, F. Girke, N. Atanasov. <a href='https://arxiv.org/abs/2404.18321'>Riemannian Optimization for Active Mapping with Robot Teams</a>. In Submission. 2024.
+
+                  
+      <br><br>
+                      <code>@Article{Asgharivaskasi-ROAM,
+                          <br>
+                          &nbsp;&nbsp;title={Riemannian Optimization for Active Mapping with Robot Teams},
+                          <br>
+                          &nbsp;&nbsp;author={Arash Asgharivaskasi and Fritz Girke and Nikolay Atanasov},
+                          <br>
+                          &nbsp;&nbsp;journal = {arXiv preprint 2404.18321},
+                          <br>
+                          &nbsp;&nbsp;year={2024},
+                          <br>
+                          &nbsp;&nbsp;url = {https://github.com/ExistentialRobotics/ROAM/},
+                          <br>
+                          &nbsp;&nbsp;pdf = {https://arxiv.org/pdf/2404.18321}
+                          <br>
+                          }
+                      </code>
+      </left></tr>
+    </table>
+    <br>
+    <hr>
+
+            <table align=center width=1100px>
+                <tr>
+                    <td>
+                      <left>
+                <center><h1>Acknowledgements</h1></center>
+                We gratefully acknowledge support from NSF FRR CAREER 2045945, ONR N00014-23-1-2353, and ARL DCIST CRA W911NF-17-2-0181. The Unity simulation used for evaluation is developed by ARL for the <a href="https://www.dcist.org">DCIST project</a>.<br />
+            </left>
+        </td>
+        </tr>
+
+</body>
+</html>
