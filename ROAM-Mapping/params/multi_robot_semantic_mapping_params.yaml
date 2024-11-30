@@ -2,9 +2,12 @@ octomap:
   octomap_topic: "/octomap_full"
   pointcloud_topic: "/$(arg name)/semantic_pcl"
   frame_id: "world"
+  # resolution: 0.3
+  # max_range: 10.0
+  # raycast_range: 0.5
   resolution: 0.3
-  max_range: 10.0
-  raycast_range: 0.5
+  max_range: 15.0
+  raycast_range: 10.0
   clamping_thres_min: 0.006692851
   clamping_thres_max: 0.993307149
   occupancy_thres: 0.5
@@ -13,25 +16,26 @@ octomap:
   psi: 1
   phi: -0.3
   publish_2d_map: true
-  min_ground_z: -1.5
-  max_ground_z: 1.5
-  consensus_weight: 0.8
-  sub_timer: 10
-  pub_timer: 10
+  min_ground_z: 0.0
+  max_ground_z: 0.7
+  consensus_weight: 0.2
+  sub_timer: 5
+  pub_timer: 5
 
 # Camera intrinsic matrix parameters
 camera:
-  fx: 65.24951330239097
-  fy: 65.24951330239097
-  cx: 80.0
-  cy: 60.0
+  fx: 320
+  fy: 320
+  cx: 320
+  cy: 240
 
-  width: 160
-  height: 120
+  width: 640
+  height: 480
 
 semantic_pcl:
-  color_image_topic: "/$(arg name)/camera/image"
-  semantic_image_topic: "/$(arg name)/camera/semantic_image"
-  depth_image_topic: "/$(arg name)/depth_camera/depth/image_rect_raw"
+  color_image_topic: "/$(arg name)/image"
+  semantic_image_topic: "/$(arg name)/colored_map"
+  depth_image_topic: "/$(arg name)/depth_image"
   point_type: 0
-  frame_id: "$(arg name)/camera"
+  frame_id: "$(arg name)/camera_optic"
+  unit_conversion: 1.0

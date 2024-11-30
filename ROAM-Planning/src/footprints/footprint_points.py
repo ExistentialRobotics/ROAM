@@ -54,3 +54,49 @@ def get_tricky_oval_footprint():
         [1303.15, -286.54],
         [1341.34, -118.37]]
     ) / 1000.
+
+def generate_clockwise_square(x_size, y_size, points_per_side):
+    """
+    Generates points on a clockwise square with the given parameters
+    :param x_size float: size in the x axis
+    :param y_size float: size in the y axis
+    :param points_per_side int: number of points to generate per side
+    :return array(N, 2)[float]: points defining the square
+    """
+    y_range = np.linspace(-y_size / 2, y_size / 2, points_per_side, endpoint=True)
+    x_range = np.linspace(-x_size / 2, x_size / 2, points_per_side, endpoint=True)
+    y_range = np.vstack(([np.zeros_like(y_range)], [y_range])).T
+    x_range = np.vstack(([[x_range], np.zeros_like(x_range)])).T
+
+    back_points = y_range + x_range[0, :]
+
+    front_points = y_range + x_range[-1, :]
+    zero_ind = np.argmin(np.abs(front_points[:, 1]))
+    front_first_half = front_points[zero_ind:, :]
+    front_last_half = front_points[:zero_ind]
+
+    left_points = x_range + y_range[-1, :]
+
+    right_points = x_range + y_range[0, :]
+    right_points = right_points[::-1, :]
+
+    # points = np.vstack((back_points, front_points, left_points, right_points))
+    points = np.vstack((front_first_half, right_points, back_points, left_points, front_last_half))
+    return points
+
+
+def get_jackal_footprint(points_per_side=11, debug=False):
+    """
+    Gives an estimate of the ClearPath jackal robot footprint
+    :param points_per_side int: number of points per side to discretize
+    :param debug bool: show plots?
+    :return array(N, 2)[float]: points defining the footprint
+    """
+    assert points_per_side % 2 != 0 and "Must be odd, so 0 is generated"
+    length = .508
+    width = .430
+    points = generate_clockwise_square(length, width, points_per_side)
+    if debug:
+        plt.scatter(points[:, 0], points[:, 1])
+        plt.show()
+    return points
