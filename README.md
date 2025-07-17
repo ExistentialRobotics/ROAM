@@ -37,12 +37,12 @@ If you found this work useful, we would appreciate if you could cite our work:
 - [1] A. Asgharivaskasi, F. Girke, N. Atanasov. [**Riemannian Optimization for Active Mapping with Robot Teams**](https://arxiv.org/abs/2404.18321). [arXiv:2404.18321](https://arxiv.org/abs/2404.18321).
  
  ```bibtex
-@InProceedings{Asgharivaskasi-TRO24,
+@Article{Asgharivaskasi-ROAM,
   title = {Riemannian Optimization for Active Mapping with Robot Teams},
-  author = {Asgharivaskasi, Arash and Girke, Fritz and Atanasov, Nikolay},
-  year = {2024},
-  booktitle = {arxiv},
-  pdf = {https://arxiv.org/pdf/2404.18321}
+  author = {Arash Asgharivaskasi and Fritz Girke and Nikolay Atanasov},
+  journal = {IEEE Transactions on Robotics},
+  year = {2025},
+  url = {https://github.com/ExistentialRobotics/ROAM/},
 }
 ```
 
