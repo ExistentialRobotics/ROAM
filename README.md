@@ -34,15 +34,18 @@ Please check https://github.com/ExistentialRobotics/ROAM-Example for a Gazebo de
 
 If you found this work useful, we would appreciate if you could cite our work:
 
-- [1] A. Asgharivaskasi, F. Girke, N. Atanasov. [**Riemannian Optimization for Active Mapping with Robot Teams**](https://arxiv.org/abs/2404.18321). [arXiv:2404.18321](https://arxiv.org/abs/2404.18321).
+- [1] A. Asgharivaskasi, F. Girke, N. Atanasov, [**Riemannian Optimization for Active Mapping with Robot Teams**](https://doi.org/10.1109/TRO.2025.3526295), IEEE Transactions on Robotics (T-RO), Vol. 41, pp. 1077-1097, 2025.
  
  ```bibtex
-@Article{Asgharivaskasi-ROAM,
-  title = {Riemannian Optimization for Active Mapping with Robot Teams},
-  author = {Arash Asgharivaskasi and Fritz Girke and Nikolay Atanasov},
-  journal = {IEEE Transactions on Robotics},
+@Article{Asgharivaskasi_ROAM_TRO25,
+  author = {Asgharivaskasi, Arash and Girke, Fritz and Atanasov, Nikolay},
+  title = {Riemannian Optimization for Active Mapping With Robot Teams},
+  journal = {IEEE Transactions on Robotics (T-RO)},
   year = {2025},
-  url = {https://github.com/ExistentialRobotics/ROAM/},
+  volume = {41},
+  pages = {1077-1097},
+  url = {https://arxiv.org/abs/2404.18321},
+  doi = {https://doi.org/10.1109/TRO.2025.3526295}
 }
 ```
 
