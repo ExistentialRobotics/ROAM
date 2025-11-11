@@ -12,7 +12,7 @@ import numpy as np
 
 from nav_msgs.msg import Path, Odometry
 from std_msgs.msg import Empty
-from geometry_msgs.msg import Pose, PoseStamped
+from geometry_msgs.msg import Pose, PoseStamped, Twist
 
 
 class PathNavigation:
@@ -35,6 +35,7 @@ class PathNavigation:
         self.collision_sub = message_filters.Subscriber(self.robot_name + '/planner/collision', Empty, queue_size = 15)
         self.collision_sub.registerCallback(self.collision_callback)
         
+        self.cmd_vel_pub = rospy.Publisher(self.robot_name + '/cmd_vel', Twist, queue_size = 15)
         self.path = None
         
         self.position_cmd_pub = rospy.Publisher(self.robot_name + "/planner/position_cmd", PoseStamped, queue_size = 15)
@@ -54,18 +55,19 @@ class PathNavigation:
                     
                     peer_collision = False
                     for i in range(num_agents):
-                    	if self.robot_name[-1] == str(i + 1):
-                    		continue
-                    	peer_frame_id = self.robot_name[:-1] + str(i + 1) + '/base_link' # Assuming the robot frame is named as 'robot_i/base_link'
-                    	peer_pose = self.get_pose_from_tf(peer_frame_id)
-                    	if np.linalg.norm(np.array([next_pose.position.x - peer_pose[0], next_pose.position.y - peer_pose[1]])) <= safety_dist:
-                    		peer_collision = True
-                    		rospy.loginfo("{}: Possible close call! Stopping for deconflicting...".format(self.robot_name))
-                    		break
+                        if self.robot_name[-1] == str(i + 1):
+                            continue
+                        peer_frame_id = self.robot_name[:-1] + str(i + 1) + '/base_link' # Assuming the robot frame is named as 'robot_i/base_link'
+                        peer_pose = self.get_pose_from_tf(peer_frame_id)
+                        if np.linalg.norm(np.array([next_pose.position.x - peer_pose[0], next_pose.position.y - peer_pose[1]])) <= safety_dist:
+                            peer_collision = True
+                            rospy.loginfo("{}: Possible close call! Stopping for deconflicting...".format(self.robot_name))
+                            break
                     
                     if peer_collision:
-                    	rospy.sleep(0.5)
-                    	continue
+                        self.cmd_vel_pub.publish(Twist())
+                        rospy.sleep(0.5)
+                        continue
                     
                     position_cmd_msg = PoseStamped()
                     position_cmd_msg.pose = next_pose
@@ -81,6 +83,8 @@ class PathNavigation:
                         self.path = self.path[1:]
                     else:
                         self.path = None
+            else:
+                self.cmd_vel_pub.publish(Twist())
             rospy.sleep(tau)
                 
     def get_pose_from_tf(self, from_frame_id):
@@ -109,12 +113,12 @@ class PathNavigation:
         no_transfrom = True
         while no_transfrom:
             try:
-            	(translation, rotation) = self.tf_listener.lookupTransform(self.world_frame_id,
-            															   from_frame_id,
-            															   rospy.Time(0))
-            	no_transfrom = False
+                (translation, rotation) = self.tf_listener.lookupTransform(self.world_frame_id,
+                                                                           from_frame_id,
+                                                                           rospy.Time(0))
+                no_transfrom = False
             except tf.LookupException:
-            	continue
+                continue
         return (translation, rotation)
     
     def path_callback(self, path_msg):

@@ -1,40 +1,40 @@
 footprint:
-  type: 'tricky_circle'
+  type: 'jackal'
   angular_resolution: 0.01745
-  inflation_scale: 1.3
+  inflation_scale: 1.4
 
 planning:
-  SE2_radius: 16.0
-  max_iter: 5
-  max_path_length: 100
-  step_size: 0.001
-  angular_range: 1.570796327
+  SE2_radius: 2 
+  max_iter: 10 
+  max_path_length: 15.0
+  step_size: 0.001 
+  angular_range: 1.570796327 
   angular_samples: 32
   num_orientation_samples: 8
-  distance_coeff: 0.001
+  distance_coeff: 0.01 
   theta_coeff: 0.1
   min_frontier_size: 30
-  goal_check_radius: 2.0
-  draw_radius: 15
+  goal_check_radius: 0.3 
+  draw_radius: 0.2 
+  clean_kernel_size: 0.6 
+  erode_kernel_size: 0.8 
+  median_filter_enable: false 
   map_topic: '/$(arg name)/occupancy_map_2D'
   collision_check_period: 1
   
   multi:
-    num_agents: 6
-    horizon: 5
-    delta_q: 10.0
-    gamma_q: 0.01
-    robot_colision_coeff: 1000000
-    epsilon: 1
-    optimization_period: 0.1
-    should_plan_threshold: 0.3
-    need_plan_threshold: 0.2
-    need_plan_period: 1.0
+    num_agents: 2
+    horizon: 10 
+    delta_q: 10.0 
+    gamma_q: 0.01 
+    robot_colision_coeff: 5 
+    epsilon: 0.1 
+    should_plan_threshold: 0.6 
+    need_plan_threshold: 0.6 
+    need_plan_period: 0.05 
 
 navigation:
-  tau: 0.005
-  alpha: 0.999
-  radius: 2.0
-  dist: 1.0
-  safety_dist: 1.0
+  tau: 0.005 
+  dist: 0.2 
+  safety_dist: 0.1 
   publish_odom: true

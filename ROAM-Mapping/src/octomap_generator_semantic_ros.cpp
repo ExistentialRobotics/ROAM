@@ -166,7 +166,8 @@ void SemanticOctomapGeneratorNode::publish2DOccupancyMap(const SemanticOctree* o
   {
   
     double node_z = it.getZ();
-    double node_half_side = pow(it.getSize(), 1/3) / 2;
+    // double node_half_side = pow(it.getSize(), 1/3) / 2;
+    double node_half_side = it.getSize()/2;
     double top_side = node_z + node_half_side;
     double bottom_side = node_z - node_half_side;
     
